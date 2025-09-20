@@ -17,6 +17,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Get version from ChangeLog
         id: changelog
         run: |
@@ -24,8 +25,16 @@ jobs:
           echo "VERSION=$VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "::set-output name=version::$VERSION"
+      
+      - name: Lowercase repository owner
+        id: repo_owner
+        run: |
+          REPO_OWNER_LOWER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
+          echo "REPO_OWNER_LOWER=$REPO_OWNER_LOWER" >> $GITHUB_ENV
+          echo "::set-output name=repo_owner_lower::$REPO_OWNER_LOWER"
+        
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ steps.changelog.outputs.version }} .
+        run: docker build -t ghcr.io/${{ steps.repo_owner.outputs.repo_owner_lower }}/${{ github.event.repository.name }}:${{ steps.changelog.outputs.version }} .
 
       - name: Push Docker image
         run: docker push ghcr.io/${{ github.repository }}/gitops-intro:${{ steps.changelog.outputs.version }}
