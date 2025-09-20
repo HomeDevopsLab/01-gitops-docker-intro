@@ -25,7 +25,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "::set-output name=version::$VERSION"
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository }}/gitops-intro:${{ steps.changelog.outputs.version }} .
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ steps.changelog.outputs.version }} .
 
       - name: Push Docker image
         run: docker push ghcr.io/${{ github.repository }}/gitops-intro:${{ steps.changelog.outputs.version }}
