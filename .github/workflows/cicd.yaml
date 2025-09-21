@@ -37,4 +37,4 @@ jobs:
         run: docker build -t ghcr.io/${{ steps.repo_owner.outputs.repo_owner_lower }}/${{ github.event.repository.name }}:${{ steps.changelog.outputs.version }} .
 
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository }}/gitops-intro:${{ steps.changelog.outputs.version }}
+        run: docker push ghcr.io/${{ steps.repo_owner.outputs.repo_owner_lower }}/${{ github.event.repository.name }}:${{ steps.changelog.outputs.version }}
